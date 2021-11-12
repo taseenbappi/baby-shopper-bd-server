@@ -20,7 +20,17 @@ async function run() {
         await client.connect();
         const database = client.db("babyShopperDB");
         const toysCollection = database.collection("toys");
+        const orderCollection = database.collection("order_info");
+        const usersCollection = database.collection("users");
+        const reviewsCollection = database.collection("reviews");
 
+        //-------------Toys api--------------//
+        // post a toys api
+        app.post('/toys', async (req, res) => {
+            const toy = req.body;
+            const result = await toysCollection.insertOne(toy);
+            res.json(result);
+        })
         // all toys api
         app.get('/toys', async (req, res) => {
             const cursor = toysCollection.find({});
@@ -28,7 +38,7 @@ async function run() {
             res.json(result);
 
         })
-        // find by id
+        // find toy by id
         app.get('/toys/:id', async (req, res) => {
             const toyId = req.params.id;
             const id = { _id: ObjectId(toyId) }
@@ -36,6 +46,41 @@ async function run() {
             res.json(result);
 
         })
+
+        //-------------order api--------------//
+        //order info by email id api
+        app.get("/placedOrder", async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = orderCollection.find(query);
+            const result = await cursor.toArray();
+            res.json(result);
+        })
+        //order placed info api
+        app.post("/placedOrder", async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.json(result);
+        })
+
+        //-------------users api--------------//
+        //users info api
+        app.post("/users", async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.json(result);
+        })
+
+        //-------------users api--------------//
+        app.post("/reviews", async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
+            res.json(result);
+        })
+
+
+
+
 
     } finally {
         // await client.close();

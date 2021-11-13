@@ -38,6 +38,14 @@ async function run() {
             res.json(result);
 
         })
+        // delete by toys api
+        app.delete('/toys/:id', async (req, res) => {
+            const toyId = req.params.id;
+            const id = { _id: ObjectId(toyId) }
+            const result = await toysCollection.deleteOne(id);
+            res.json(result);
+
+        })
         // find toy by id
         app.get('/toys/:id', async (req, res) => {
             const toyId = req.params.id;
@@ -61,6 +69,16 @@ async function run() {
             const orders = orderCollection.find({});
             const result = await orders.toArray();
             res.json(result);
+        })
+
+        // delete by orders api
+        app.delete('/orders/:id', async (req, res) => {
+            const toyId = req.params.id;
+            const id = { _id: ObjectId(toyId) }
+            console.log(id);
+            const result = await orderCollection.deleteOne(id);
+            res.json(result);
+
         })
         //order placed info api
         app.post("/placedOrder", async (req, res) => {

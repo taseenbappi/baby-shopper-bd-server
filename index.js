@@ -94,6 +94,12 @@ async function run() {
             const result = await usersCollection.insertOne(user);
             res.json(result);
         })
+        //update users info api
+        app.put("/users", async (req, res) => {
+            const user = req.query.email;
+            const result = await usersCollection.updateOne(user);
+            res.json(result);
+        })
 
         //-------------users api--------------//
         app.post("/reviews", async (req, res) => {
